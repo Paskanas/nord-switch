@@ -12,52 +12,41 @@ class MainClass
 
   public function main()
   {
-    if ($this->salary > 0) {
-      echo "Salary: $this->salary\n";
-    }
-    if ($this->taxException > 0) {
-      echo "Tax exception: $this->taxException\n";
-    }
-    if ($this->additionalIncome > 0) {
-      echo "Additional income: $this->additionalIncome\n";
-    }
-    if ($this->tax > 0) {
-      $output = new OutputHandler();
-      $output->tax_output($this->tax);
-    }
+    $output = new OutputHandler();
+    $output->showEnteredParameters($this->salary, $this->taxException, $this->additionalIncome, $this->tax);
 
-    echo "Options: \n";
-    echo "1-set salary, 2-set tax exemption, 3-set additional income, 4-calculate tax, 5-quit app\n";
+    $output->output("Options: ");
+    $output->output("1-set salary, 2-set tax exemption, 3-set additional income, 4-calculate tax, 5-quit app");
     $option = readline("Enter option: ");
     if ($option == 1) {
       $salaryInput = new InputHandler();
       $this->salary = $salaryInput->validateInput('salary');
-      print("\033[2J\033[;H");
+      $output->clearConsole();
       $this->main();
     } elseif ($option == 2) {
       $taxInput = new InputHandler();
       $this->taxException = $taxInput->validateInput('tax');
-      print("\033[2J\033[;H");
+      $output->clearConsole();
       $this->main();
     } elseif ($option == 3) {
       $incomeInput = new InputHandler();
       $this->additionalIncome = $incomeInput->validateInput('income');
-      print("\033[2J\033[;H");
+      $output->clearConsole();
       $this->main();
     } elseif ($option == 4) {
       if ($this->salary > 0) {
         $taxCalculation = new TaxCalculator($this->salary, $this->taxException, $this->additionalIncome);
         $this->tax = $taxCalculation->calculateTax();
+        $output->clearConsole();
       } else {
-        print("\033[2J\033[;H");
-        echo "Need to set salary first! \n";
+
+        $output->output("Need to set salary first!", true);
       }
       $this->main();
     } elseif ($option == 5) {
       exit;
     } else {
-      print("\033[2J\033[;H");
-      echo "Choose correct option! \n";
+      $output->output("Choose correct option!", true);
       $this->main();
     }
   }

@@ -1,17 +1,36 @@
 <?php
 class OutputHandler
 {
-  public function output($output)
+  public function clearConsole()
   {
-    echo $output;
+    print("\033[2J\033[;H");
   }
 
-  public function total_income_output($output)
+  public function output($output, $clear = false)
   {
-    echo "Total income: $output" . "\n";
+    if ($clear) {
+      $this->clearConsole();
+    }
+    echo $output . " \n";
   }
+
   public function tax_output($output)
   {
     echo "Tax: $output" . "\n";
+  }
+  public function showEnteredParameters($salary, $taxException, $additionalIncome, $tax)
+  {
+    if ($salary > 0) {
+      echo "Salary: $salary\n";
+    }
+    if ($taxException > 0) {
+      echo "Tax exception: $taxException\n";
+    }
+    if ($additionalIncome > 0) {
+      echo "Additional income: $additionalIncome\n";
+    }
+    if ($tax > 0) {
+      $this->tax_output($tax);
+    }
   }
 }
