@@ -4,11 +4,10 @@ require_once('./src/OutputHandler.php');
 require_once('./src/TaxCalculator.php');
 class MainClass
 {
-  public $total_income = 0;
-  public $salary;
-  public $taxException;
-  public $additionalIncome;
-  public $tax;
+  private $salary;
+  private $taxException;
+  private $additionalIncome;
+  private $tax;
 
   public function main()
   {
@@ -39,7 +38,6 @@ class MainClass
         $this->tax = $taxCalculation->calculateTax();
         $output->clearConsole();
       } else {
-
         $output->output("Need to set salary first!", true);
       }
       $this->main();

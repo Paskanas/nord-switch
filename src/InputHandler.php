@@ -1,8 +1,8 @@
 <?php
 class InputHandler
 {
-  public $validation = '';
-  public $input = 0;
+  private $validation = '';
+  private $input = 0;
   public function validateInput($text)
   {
     $this->input = readline("Enter $text: ");
