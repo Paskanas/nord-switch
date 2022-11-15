@@ -5,41 +5,60 @@ require_once('./src/TaxCalculator.php');
 class MainClass
 {
   public $total_income = 0;
+  public $salary;
+  public $taxException;
+  public $additionalIncome;
+  public $tax;
+
   public function main()
   {
-    $salaryInput = new InputHandler();
-    $salary = $salaryInput->validateInput('salary');
-    $taxInput = new InputHandler();
-    $tax = $taxInput->validateInput('tax');
-    $incomeInput = new InputHandler();
-    $income = $incomeInput->validateInput('income');
+    if ($this->salary > 0) {
+      echo "Salary: $this->salary\n";
+    }
+    if ($this->taxException > 0) {
+      echo "Tax exception: $this->taxException\n";
+    }
+    if ($this->additionalIncome > 0) {
+      echo "Additional income: $this->additionalIncome\n";
+    }
+    if ($this->tax > 0) {
+      $output = new OutputHandler();
+      $output->tax_output($this->tax);
+    }
 
-    $taxCalculation = new TaxCalculator($salary, $tax, $income);
-    $output = new OutputHandler();
-    $output->tax_output($taxCalculation->calculateTax());
-    // $quit = readline('Do you want to continue y/n: ');
-    $quit = '';
-    while (($quit != 'y') && ($quit != 'n')) {
-      echo "$quit \n";
-      $quit = readline('Do you want to continue y/n: ');
-      if ($quit === 'y') {
-        $this->main();
-      } elseif ($quit === 'n') {
-        exit;
+    echo "Options: \n";
+    echo "1-set salary, 2-set tax exemption, 3-set additional income, 4-calculate tax, 5-quit app\n";
+    $option = readline("Enter option: ");
+    if ($option == 1) {
+      $salaryInput = new InputHandler();
+      $this->salary = $salaryInput->validateInput('salary');
+      print("\033[2J\033[;H");
+      $this->main();
+    } elseif ($option == 2) {
+      $taxInput = new InputHandler();
+      $this->taxException = $taxInput->validateInput('tax');
+      print("\033[2J\033[;H");
+      $this->main();
+    } elseif ($option == 3) {
+      $incomeInput = new InputHandler();
+      $this->additionalIncome = $incomeInput->validateInput('income');
+      print("\033[2J\033[;H");
+      $this->main();
+    } elseif ($option == 4) {
+      if ($this->salary > 0) {
+        $taxCalculation = new TaxCalculator($this->salary, $this->taxException, $this->additionalIncome);
+        $this->tax = $taxCalculation->calculateTax();
+      } else {
+        print("\033[2J\033[;H");
+        echo "Need to set salary first! \n";
       }
-    };
-    // if ($_POST) {
-    //   $validateInputs = new InputHandler();
-    //   $output = new OutputHandler();
-    //   $inputValidation = $validateInputs->validateInput();
-    //   if ($inputValidation) {
-    //     $output->output($inputValidation);
-    //   } else {
-    //     $this->total_income = $_POST['salary'] + $_POST['additional_income'] - $_POST['tax_exemption'];
-    //     $calculateTax = new TaxCalculator();
-    //     $output->total_income_output($this->total_income);
-    //     $output->tax_output($calculateTax->calculateTax($this->total_income));
-    //   }
-    // }
+      $this->main();
+    } elseif ($option == 5) {
+      exit;
+    } else {
+      print("\033[2J\033[;H");
+      echo "Choose correct option! \n";
+      $this->main();
+    }
   }
 }

@@ -14,6 +14,7 @@ class TaxCalculator
     } else {
       $tax = $this->total_income * 0.25;
     }
+
     return $tax;
   }
 }
